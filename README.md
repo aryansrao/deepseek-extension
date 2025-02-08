@@ -4,8 +4,6 @@
 
 [![Version](https://img.shields.io/visual-studio-marketplace/v/aryansrao.deekseek-extension?color=blue&style=for-the-badge)](https://marketplace.visualstudio.com/items?itemName=aryansrao.deekseek-extension)
 
-[![Downloads](https://img.shields.io/visual-studio-marketplace/d/aryansrao.deekseek-extension?style=for-the-badge)](https://marketplace.visualstudio.com/items?itemName=aryansrao.deekseek-extension)
-
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 ## Screenshots
