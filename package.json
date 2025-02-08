@@ -2,7 +2,7 @@
   "name": "deekseek-extension",
   "displayName": "DeepSeek extension",
   "description": "An unofficial deepseek extension for vscode",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "publisher": "aryansrao",
   "author": {
     "name": "aryansrao"
