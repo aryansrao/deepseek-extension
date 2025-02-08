@@ -1,95 +1,122 @@
 
-# Deep Seek Extension (Unofficial)
+
+<h1>DeepSeek AI Assistant</h1>
+
+<h3>Your Local AI Programming Assistant for VS Code</h3>
 
   
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/aryansrao.deekseek-extension)](https://marketplace.visualstudio.com/items?itemName=aryansrao.deekseek-extension)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/aryansrao.deekseek-extension?color=blue&style=for-the-badge)](https://marketplace.visualstudio.com/items?itemName=aryansrao.deekseek-extension)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Downloads](https://img.shields.io/visual-studio-marketplace/d/aryansrao.deekseek-extension?style=for-the-badge)](https://marketplace.visualstudio.com/items?itemName=aryansrao.deekseek-extension)
 
-  
-
-A VS Code extension that lets you chat with DeepSeek AI models through Ollama, right in your editor. check out my [github](github.com/aryansrao) for more.
+[![License](https://img.shields.io/github/license/aryansrao/deekseek-extension?style=for-the-badge)](LICENSE)
 
   
 
-## Key Features
+<img  src="media/demo.mov"  alt="DeepSeek Demo"  width="800" />
+
+</div>
 
   
 
-- Seamless integration with VS Code
-
-- Native-like UI with smooth animations
-
-- Adaptive theme support (Dark/Light)
-
-- Powered by Ollama's local AI infrastructure
-
-- Real-time code suggestions and completions
-
-- Context-aware responses
-
-- Customizable 
-
-  
-
-## Keyboard Shortcuts
-
-  
-
-- Open Chat: `Ctrl+Alt+D` (Windows/Linux) or `Cmd+Alt+D` (macOS)
-
-- Send Message: `Ctrl+Enter` or `Cmd+Enter`
-
-- Clear Chat: `Ctrl+Alt+C` or `Cmd+Alt+C`
+## ⚡ Quick Setup
 
   
 
 
-## Requirements
+
+# 1. Install Ollama
+
+visit https://ollama.com
 
   
 
-1.  **Install Ollama** from [ollama.com](https://ollama.com)
-
-2.  **Pull the DeepSeek model**:
-
-```sh
-
-  
-
-ollama run deepseek-r1
-
-  
-
+# 2. Pull DeepSeek Model
+```
+ollama  pull  deepseek-r1
 ```
 
-For more information about the model, visit: https://ollama.com/library/deepseek-r1
+# 3. Install Extension
+```
+code  --install-extension  aryansrao.deekseek-extension
+```
+
 
   
 
-## Quick Start
+## 🎯 What It Does
 
   
 
-1. Make sure Ollama is running
-
-2. Open Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`)
-
-3. Type "> start" make sure to have the deepseek start
+DeepSeek brings powerful AI assistance directly into VS Code, running completely locally through Ollama:
 
   
 
-## More Information
+-  **Code Generation** - Get intelligent code suggestions
+
+-  **Real-time Help** - Ask questions about your code
+
+-  **Documentation** - Generate comments and documentation
+
+-  **Debugging** - Get help fixing bugs
+
+-  **Best Practices** - Learn coding patterns and improvements
 
   
 
-Check out the [GitHub repository](https://github.com/aryansrao/deepseek-extension) for:
+## 📋 Requirements
 
   
 
-- Detailed documentation and license
+- VS Code 1.96+
 
-- Source code
+- MacOS/Linux/Windows
 
-- Demo
+- [Ollama](https://ollama.com) installed
+
+  
+
+## 🔍 Troubleshooting
+
+  
+
+**Extension Not Working?**
+
+1. Verify Ollama is running: `curl http://localhost:11434/api/tags`
+
+2. Check model is downloaded: `ollama list`
+
+3. Restart VS Code
+
+4. Check logs: `View > Output > DeepSeek`
+
+  
+
+## 📚 Resources
+
+  
+
+- [GitHub Repo](https://github.com/aryansrao/deepseek-extension)
+
+- [Issue Tracker](https://github.com/aryansrao/deepseek-extension/issues)
+
+- [Ollama Docs](https://ollama.com/docs)
+
+
+## 🤝 Contributing
+
+  
+
+Contributions are welcome!
+
+  
+
+<div  align="center">
+<br>
+<a  href="https://github.com/aryansrao/deepseek-extension/stargazers">
+<img  src="https://img.shields.io/github/stars/aryansrao/deepseek-extension?style=social"  alt="Stars" />
+</a>
+<a  href="https://github.com/aryansrao">
+<img  src="https://img.shields.io/github/followers/aryansrao?style=social"  alt="Follow" />
+</div>
