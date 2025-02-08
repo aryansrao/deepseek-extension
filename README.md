@@ -74,7 +74,7 @@ DeepSeek brings powerful AI assistance directly into VS Code, running completely
 
 **Extension Not Working?**
 
-1. Verify Ollama is running: 
+1. Verify Ollama is running:
 
 2. Check model is downloaded: `ollama list`
 
