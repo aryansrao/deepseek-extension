@@ -188,18 +188,3 @@ Contributions are welcome!
 
   
 
-<div  align="center">
-
-<br>
-
-<a  href="https://github.com/aryansrao/deepseek-extension/stargazers">
-
-<img  src="https://img.shields.io/github/stars/aryansrao/deepseek-extension?style=social"  alt="Stars" />
-
-</a>
-
-<a  href="https://github.com/aryansrao">
-
-<img  src="https://img.shields.io/github/followers/aryansrao?style=social"  alt="Follow" />
-
-</div>
