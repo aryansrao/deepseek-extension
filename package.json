@@ -1,0 +1,71 @@
+{
+  "name": "deekseek-extension",
+  "displayName": "DeepSeek extension",
+  "description": "An unofficial deepseek extension for vscode",
+  "version": "0.0.1",
+  "publisher": "aryansrao",
+  "author": {
+    "name": "aryansrao"
+  },
+  "icon": "media/deepseek.png",
+  "galleryBanner": {
+    "color": "#2C2C32",
+    "theme": "dark"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aryansrao/deepseek-extension.git"
+  },
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "AI",
+    "Machine Learning",
+    "Programming Languages",
+    "Education",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "deepseek",
+    "ollama",
+    "chat",
+    "code-assistant",
+    "code-completion",
+    "local-ai"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "deep-seek.start",
+        "title": "start"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.16.0",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "ollama": "^0.5.12"
+  }
+}

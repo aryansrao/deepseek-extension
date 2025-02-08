@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Deep Seek Chat</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+	<style>
+		body {
+			font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: var(--background-color, #000);
+			color: var(--text-color, #fff);
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			height: 100vh;
+			animation: fadeIn 0.5s ease-in-out;
+			transition: background-color 0.5s, color 0.5s;
+			font-size: 16px;
+			line-height: 1.6;
+		}
+		:root {
+			--background-color: #000;
+			--text-color: #fff;
+			--nav-bg: linear-gradient(45deg, #8a2be2, #4b0082);
+			--border-color: #333;
+			--link-color: #8a2be2;
+			--button-background: linear-gradient(45deg, #8a2be2, #4b0082);
+			--button-hover-background: linear-gradient(45deg, #4b0082, #8a2be2);
+			--bot-background: rgb(0, 0, 0);
+			--overlay-background: rgba(0, 0, 0, 0.453);
+			--settings-background: #000000;
+			--settings-border-color: #333;
+		}
+		.light-theme {
+			--background-color: #ffffff;
+			--text-color: #333;
+			--nav-bg: linear-gradient(45deg, #4b0082, #8a2be2);
+			--border-color: #ccc;
+			--link-color: #8a2be2;
+			--button-background: linear-gradient(45deg, #8a2be2, #4b0082);
+			--button-hover-background: linear-gradient(45deg, #4b0082, #8a2be2);
+			--bot-background: #ffffff;
+			--overlay-background: rgba(255, 255, 255, 0.406);
+			--settings-background: #ffffff64;
+			--settings-border-color: #ccc;
+		}
+		@keyframes fadeIn {
+			from { opacity: 0; }
+			to { opacity: 1; }
+		}
+		@keyframes loadingBar {
+			0% { width: 0; }
+			100% { width: 100%; }
+		}
+		@keyframes fadeInText {
+			from { opacity: 0; }
+			to { opacity: 1; }
+		}
+		.navbar {
+			padding: 1rem 2rem;
+			background-color: var(--nav-bg);
+			backdrop-filter: blur(5px);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			border-bottom: 1px solid var(--border-color);
+			transition: background-color 0.5s, border-color 0.5s;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+		}
+		.navbar img {
+			height: 40px;
+		}
+		.navbar p {
+			margin: 0;
+			font-size: 1rem;
+			color: var(--text-color);
+			transition: color 0.5s;
+		}
+		.navbar a {
+			color: var(--link-color);
+			text-decoration: none;
+			position: relative;
+			transition: color 0.3s;
+		}
+		.navbar a::after {
+			content: '';
+			position: absolute;
+			width: 0;
+			height: 2px;
+			bottom: 0;
+			left: 0;
+			background-color: var(--link-color);
+			transition: width 0.3s;
+		}
+		.navbar a:hover::after {
+			width: 100%;
+		}
+		#themeToggle {
+			cursor: pointer;
+			font-size: 1.5rem;
+			margin-left: 1rem;
+		}
+		#response {
+			flex: 1;
+			padding: 1rem;
+			border-bottom: none;
+			background-color: var(--bot-background);
+			backdrop-filter: blur(10px);
+			overflow-y: auto;
+			transition: background-color 0.5s, border-color 0.5s;
+			border-radius: 8px 8px 0 0;
+			font-size: 0.875rem;
+		}
+		#inputArea {
+			display: flex;
+			align-items: center;
+			padding: 1rem;
+			background-color: var(--nav-bg);
+			border-top: 1px solid var(--border-color);
+			border-radius: 0 0 8px 8px;
+			box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+			flex-direction: row-reverse;
+		}
+		#prompt {
+			flex: 1;
+			border: none;
+			border-radius: 20px;
+			padding: 0.75rem 1rem;
+			background-color: var(--background-color);
+			color: var(--text-color);
+			margin-left: 0.5rem;
+			transition: background-color 0.5s, color 0.5s, box-shadow 0.3s;
+			font-size: 0.875rem;
+		}
+		#prompt:focus {
+			outline: none;
+			box-shadow: 0 0 10px rgba(0, 122, 204, 0.5);
+		}
+		#askBtn {
+			padding: 0.75rem 1.5rem;
+			border: none;
+			border-radius: 20px;
+			background-color: var(--button-background);
+			color: var(--text-color);
+			cursor: pointer;
+			transition: background-color 0.3s, transform 0.3s, color 0.5s, box-shadow 0.3s;
+			font-size: 0.875rem;
+		}
+		#askBtn:hover {
+			background-color: var(--button-hover-background);
+			transform: scale(1.05);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		}
+		.message {
+			display: flex;
+			align-items: flex-start;
+			margin-bottom: 0.5rem;
+			padding: 0.5rem;
+			border-radius: 8px;
+			background-color: transparent;
+			border: none;
+			backdrop-filter: none;
+			animation: fadeIn 0.5s ease-in-out;
+			position: relative;
+			transition: transform 0.3s, box-shadow 0.3s, background-color 0.5s, border-color 0.5s;
+			font-size: 0.75rem;
+		}
+		.message.loading .content::after {
+			content: '';
+			display: block;
+			width: 0;
+			height: 2px;
+			background-color: var(--text-color);
+			animation: loadingBar 2s infinite;
+			margin-top: 0.5rem;
+		}
+		.message.loaded .content {
+			animation: fadeInText 1s forwards;
+		}
+		.message:hover {
+			transform: scale(1.02);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		}
+		.message.user {
+			background-color: transparent;
+			color: var(--text-color);
+			align-self: flex-end;
+			flex-direction: row;
+			transition: background-color 0.5s, color 0.5s;
+		}
+		.message.bot {
+			background-color: transparent;
+			color: var(--text-color);
+			flex-direction: row;
+			border: none;
+			transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+		}
+		.message .content {
+			flex: 1;
+			margin-left: 0.25rem;
+		}
+		.copyBtn {
+			background-color: rgba(0, 0, 0, 0);
+			backdrop-filter: blur(5px);
+			color: var(--text-color);
+			border: none;
+			border-radius: 4px;
+			padding: 0.2rem 0.4rem;
+			cursor: pointer;
+			transition: background-color 0.3s, color 0.5s, box-shadow 0.3s;
+			align-self: flex-end;
+			margin-top: 0.25rem;
+			font-size: 0.75rem;
+		}
+		.copyBtn:hover {
+			background-color: rgba(0, 0, 0, 0.7);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		}
+		.navbar svg {
+			height: 50px;
+			transition: transform 0.3s, filter 0.3s;
+		}
+		.navbar svg:hover {
+			filter: drop-shadow(0 0 10px var(--link-color));
+		}
+		#settingsOverlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: var(--overlay-background);
+			backdrop-filter: blur(10px);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: var(--text-color);
+			font-size: 1rem;
+			z-index: 1000;
+			transition: opacity 0.5s ease-in-out;
+			opacity: 0;
+			pointer-events: none;
+		}
+		#settingsOverlay.visible {
+			opacity: 1;
+			pointer-events: auto;
+		}
+		#settingsContent {
+			background-color: var(--settings-background);
+			padding: 2rem;
+			border-radius: 8px;
+			text-align: center;
+			width: 300px;
+			border: 1px solid var(--border-color);
+			position: relative;
+		}
+		#settingsContent button {
+			margin-top: 1rem;
+			padding: 0.5rem 1rem;
+			border: none;
+			border-radius: 8px;
+			background-color: var(--button-background);
+			color: var(--text-color);
+			cursor: pointer;
+			transition: background-color 0.3s, transform 0.3s, color 0.5s;
+		}
+		#settingsContent button:hover {
+			background-color: var(--button-hover-background);
+			transform: none;
+		}
+		#settingsContent a {
+			color: var(--text-color);
+			text-decoration: none;
+			display: block;
+			margin-top: 1rem;
+			transition: color 0.3s;
+			position: relative;
+		}
+		#settingsContent a::after {
+			content: '';
+			position: absolute;
+			width: 0;
+			height: 2px;
+			bottom: 0;
+			left: 0;
+			background-color: var(--link-color);
+			transition: width 0.3s;
+		}
+		#settingsContent a:hover {
+			color: var(--link-color);
+		}
+		#settingsContent a:hover::after {
+			width: 100%;
+		}
+		#settingsBtn {
+			cursor: pointer;
+		}
+		#settingsBtn svg {
+			width: 24px;
+			height: 24px;
+			fill: currentColor;
+			transition: transform 0.3s, filter 0.3s;
+		}
+		#settingsBtn svg:hover {
+			filter: drop-shadow(0 0 10px var(--link-color));
+			transform: rotate(90deg);
+		}
+		.closeBtn {
+			width: 24px;
+			height: 24px;
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			cursor: pointer;
+			transition: transform 0.3s;
+		}
+		.closeBtn::before, .closeBtn::after {
+			content: '';
+			position: absolute;
+			width: 100%;
+			height: 2px;
+			background-color: var(--text-color);
+			left: 0;
+			transition: transform 0.3s, background-color 0.3s;
+		}
+		.closeBtn::before {
+			top: 40%;
+			transform: rotate(0deg);
+		}
+		.closeBtn::after {
+			top: 80%;
+			transform: rotate(0deg);
+		}
+		.closeBtn:hover::before {
+			transform: rotate(45deg);
+			top: 50%;
+		}
+		.closeBtn:hover::after {
+			transform: rotate(-45deg);
+			top: 50%;
+		}
+		.closeBtn:hover {
+			transform: scale(1.1);
+		}
+		.message .sender-label {
+			font-weight: bold;
+			margin-right: 0.5rem;
+		}
+		.theme-switch-wrapper {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-top: 1rem;
+		}
+		.theme-switch {
+			position: relative;
+			display: inline-block;
+			width: 60px;
+			height: 34px;
+		}
+		.theme-switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+		.slider {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: var(--border-color);
+			transition: .4s;
+			border-radius: 34px;
+		}
+		.slider:before {
+			position: absolute;
+			content: "";
+			height: 26px;
+			width: 26px;
+			left: 4px;
+			bottom: 4px;
+			background-color: var(--text-color);
+			transition: .4s;
+			border-radius: 50%;
+		}
+		input:checked + .slider {
+			background-color: var(--border-color);
+		}
+		input:checked + .slider:before {
+			transform: translateX(26px);
+		}
+		.light-theme .slider {
+			background-color: var(--border-color);
+		}
+	</style>
+</head>
+<body>
+	<div class="navbar">
+		<svg fill="currentColor" fill-rule="evenodd" height="50px" style="flex:none;line-height:1" viewBox="0 0 131 24" xmlns="http://www.w3.org/2000/svg"><title>DeepSeek</title><path d="M117.986 0h-3.21v19.404h3.21V0zM8.7 5.215h1.83v2.838H8.7c-1.135 0-2.28.282-3.019 1.068-.738.785-1.016 1.99-1.016 3.194s.267 2.408 1.016 3.193c.75.786 1.884 1.068 3.018 1.068 1.135 0 2.28-.282 3.018-1.068.739-.785 1.017-1.99 1.017-3.193V.649h3.21v18.755h-3.21V18.21h-.589a3.498 3.498 0 01-.192.199c-.803.733-2.034.995-3.243.995-1.894 0-3.788-.472-5.03-1.78C2.44 16.314 2 14.303 2 12.303c0-2 .45-4 1.68-5.32 1.242-1.308 3.136-1.77 5.02-1.77zM57.564 18.9h-1.83v-2.837h1.83c1.134 0 2.28-.283 3.017-1.068.739-.785 1.017-1.99 1.017-3.194s-.267-2.408-1.017-3.194c-.749-.785-1.883-1.068-3.017-1.068s-2.28.283-3.018 1.068c-.738.786-1.017 1.99-1.017 3.194v11.655h-3.21V4.712h3.21v1.194h.59a3.42 3.42 0 01.186-.194l.005-.005c.803-.733 2.034-.995 3.243-.995 1.895 0 3.788.471 5.03 1.78 1.241 1.31 1.68 3.32 1.68 5.32 0 2-.45 4-1.68 5.319-1.23 1.32-3.135 1.77-5.019 1.77zM32.05 13.204v-1.14c0-2.064-.46-4.137-1.754-5.498-1.285-1.362-3.264-1.843-5.223-1.843-1.958 0-3.928.492-5.222 1.843-1.295 1.35-1.755 3.434-1.755 5.497 0 2.063.47 4.136 1.755 5.498 1.284 1.36 3.264 1.843 5.222 1.843 1.959 0 3.938-.493 5.223-1.843.663-.692 1.102-1.582 1.38-2.566h-3.168a5.026 5.026 0 01-.3.367c-.77.816-1.958 1.11-3.135 1.11-1.177 0-2.365-.304-3.136-1.11-.77-.807-1.048-2.063-1.048-3.299 0-1.236.278-2.482 1.049-3.298.77-.817 1.958-1.11 3.135-1.11 1.177 0 2.365.293 3.136 1.11.535.565.834 1.34.963 2.167H23.5v2.272h8.55zM48.168 12.063v1.141h-8.55v-2.272h5.671c-.129-.827-.428-1.602-.963-2.167-.77-.817-1.959-1.11-3.136-1.11s-2.365.293-3.136 1.11c-.77.816-1.048 2.063-1.048 3.298 0 1.236.278 2.492 1.049 3.299.77.806 1.958 1.11 3.135 1.11 1.177 0 2.365-.294 3.136-1.11.107-.116.203-.241.299-.367h3.168c-.278.985-.717 1.874-1.38 2.566-1.285 1.35-3.264 1.843-5.223 1.843s-3.938-.482-5.222-1.843c-1.285-1.362-1.756-3.435-1.756-5.498s.46-4.147 1.755-5.497c1.296-1.351 3.264-1.843 5.223-1.843s3.938.481 5.222 1.843c1.296 1.36 1.756 3.434 1.756 5.497zM78.635 18.315c-1.284.806-3.263 1.089-5.222 1.089-1.958 0-3.917-.294-5.212-1.09-1.295-.795-1.755-2.03-1.755-3.246h3.767c0 .472.225.953.824 1.257.6.304 1.54.419 2.462.419.92 0 1.851-.115 2.46-.42.611-.303.825-.784.825-1.256 0-.47-.214-.952-.824-1.256-.61-.304-1.627-.419-2.547-.419-1.777 0-3.563-.293-4.73-1.09-1.167-.795-1.584-2.03-1.584-3.245 0-1.215.417-2.44 1.584-3.246 1.167-.807 2.953-1.09 4.73-1.09 1.776 0 3.564.294 4.73 1.09 1.167.795 1.584 2.031 1.584 3.246h-3.264c0-.471-.203-.942-.749-1.257-.546-.303-1.391-.419-2.226-.419s-1.68.105-2.226.42c-.556.303-.75.785-.75 1.256 0 .47.204.942.75 1.256.545.304 1.316.42 2.151.42 1.959 0 3.938.292 5.222 1.088 1.295.796 1.756 2.032 1.756 3.246 0 1.215-.471 2.44-1.756 3.247zM96.507 12.063v1.141h-8.55v-2.272h5.672c-.129-.827-.429-1.602-.963-2.167-.771-.817-1.959-1.11-3.136-1.11s-2.366.293-3.136 1.11c-.77.816-1.048 2.063-1.048 3.298 0 1.236.278 2.492 1.048 3.299.77.806 1.959 1.11 3.135 1.11 1.178 0 2.366-.294 3.137-1.11.106-.116.203-.241.3-.367h3.167c-.279.985-.717 1.874-1.38 2.566-1.284 1.35-3.265 1.843-5.224 1.843-1.957 0-3.938-.482-5.222-1.843-1.284-1.362-1.754-3.435-1.754-5.498s.46-4.147 1.754-5.497c1.296-1.351 3.265-1.843 5.222-1.843 1.96 0 3.94.481 5.224 1.843 1.294 1.36 1.754 3.434 1.754 5.497zM112.624 13.204v-1.14c0-2.064-.46-4.137-1.754-5.498-1.285-1.362-3.265-1.843-5.223-1.843-1.959 0-3.928.492-5.222 1.843-1.296 1.35-1.756 3.434-1.756 5.497 0 2.063.471 4.136 1.756 5.498 1.284 1.36 3.263 1.843 5.222 1.843 1.958 0 3.938-.493 5.223-1.843.663-.692 1.102-1.582 1.38-2.566h-3.168l-.012.016c-.093.12-.185.24-.288.35-.77.817-1.957 1.11-3.135 1.11-1.177 0-2.365-.303-3.136-1.11-.77-.806-1.049-2.062-1.049-3.298 0-1.236.279-2.482 1.049-3.298.771-.817 1.959-1.11 3.136-1.11 1.178 0 2.365.293 3.135 1.11.536.565.836 1.34.964 2.167h-5.672v2.272h8.55zM128.73 19.404l-5.264-7.78 5.264-6.252h-3.97l-5.265 6.251 5.265 7.78h3.97z"></path></svg>
+		<div id="settingsBtn" style="cursor: pointer;">
+			<svg fill="#000000" height="24px" width="24px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 54 54" xml:space="preserve">
+				<g>
+					<path d="M51.22,21h-5.052c-0.812,0-1.481-0.447-1.792-1.197s-0.153-1.54,0.42-2.114l3.572-3.571
+						c0.525-0.525,0.814-1.224,0.814-1.966c0-0.743-0.289-1.441-0.814-1.967l-4.553-4.553c-1.05-1.05-2.881-1.052-3.933,0l-3.571,3.571
+						c-0.574,0.573-1.366,0.733-2.114,0.421C33.447,9.313,33,8.644,33,7.832V2.78C33,1.247,31.753,0,30.22,0H23.78
+						C22.247,0,21,1.247,21,2.78v5.052c0,0.812-0.447,1.481-1.197,1.792c-0.748,0.313-1.54,0.152-2.114-0.421l-3.571-3.571
+						c-1.052-1.052-2.883-1.05-3.933,0l-4.553,4.553c-0.525,0.525-0.814,1.224-0.814,1.967c0,0.742,0.289,1.44,0.814,1.966l3.572,3.571
+						c0.573,0.574,0.73,1.364,0.42,2.114S8.644,21,7.832,21H2.78C1.247,21,0,22.247,0,23.78v6.439C0,31.753,1.247,33,2.78,33h5.052
+						c0.812,0,1.481,0.447,1.792,1.197s0.153,1.54-0.42,2.114l-3.572,3.571c-0.525,0.525-0.814,1.224-0.814,1.966
+						c0,0.743,0.289,1.441,0.814,1.967l4.553,4.553c1.051,1.051,2.881,1.053,3.933,0l3.571-3.572c0.574-0.573,1.363-0.731,2.114-0.42
+						c0.75,0.311,1.197,0.98,1.197,1.792v5.052c0,1.533,1.247,2.78,2.78,2.78h6.439c1.533,0,2.78-1.247,2.78-2.78v-5.052
+						c0-0.812,0.447-1.481,1.197-1.792c0.751-0.312,1.54-0.153,2.114,0.42l3.571,3.572c1.052,1.052,2.883,1.05,3.933,0l4.553-4.553
+						c0.525-0.525,0.814-1.224,0.814-1.967c0-0.742-0.289-1.44-0.814-1.966l-3.572-3.571c-0.573-0.574-0.73-1.364-0.42-2.114
+						S45.356,33,46.168,33h5.052c1.533,0,2.78-1.247,2.78-2.78V23.78C54,22.247,52.753,21,51.22,21z M52,30.22
+						C52,30.65,51.65,31,51.22,31h-5.052c-1.624,0-3.019,0.932-3.64,2.432c-0.622,1.5-0.295,3.146,0.854,4.294l3.572,3.571
+						c0.305,0.305,0.305,0.8,0,1.104l-4.553,4.553c-0.304,0.304-0.799,0.306-1.104,0l-3.571-3.572c-1.149-1.149-2.794-1.474-4.294-0.854
+						c-1.5,0.621-2.432,2.016-2.432,3.64v5.052C31,51.65,30.65,52,30.22,52H23.78C23.35,52,23,51.65,23,51.22v-5.052
+						c0-1.624-0.932-3.019-2.432-3.64c-0.503-0.209-1.021-0.311-1.533-0.311c-1.014,0-1.997,0.4-2.761,1.164l-3.571,3.572
+						c-0.306,0.306-0.801,0.304-1.104,0l-4.553-4.553c-0.305-0.305-0.305-0.8,0-1.104l3.572-3.571c1.148-1.148,1.476-2.794,0.854-4.294
+						C10.851,31.932,9.456,31,7.832,31H2.78C2.35,31,2,30.65,2,30.22V23.78C2,23.35,2.35,23,2.78,23h5.052
+						c1.624,0,3.019-0.932,3.64-2.432c0.622-1.5,0.295-3.146-0.854-4.294l-3.572-3.571c-0.305-0.305-0.305-0.8,0-1.104l4.553-4.553
+						c0.304-0.305,0.799-0.305,1.104,0l3.571,3.571c1.147,1.147,2.792,1.476,4.294,0.854C22.068,10.851,23,9.456,23,7.832V2.78
+						C23,2.35,23.35,2,23.78,2h6.439C30.65,2,31,2.35,31,2.78v5.052c0,1.624,0.932,3.019,2.432,3.64
+						c1.502,0.622,3.146,0.294,4.294-0.854l3.571-3.571c0.306-0.305,0.801-0.305,1.104,0l4.553,4.553
+						c0.305,0.305,0.305,0.8,0,1.104l-3.572,3.571c-1.148,1.148-1.476,2.794-0.854,4.294c0.621,1.5,2.016,2.432,3.64,2.432h5.052
+						C51.65,23,52,23.35,52,23.78V30.22z"/>
+					<path d="M27,18c-4.963,0-9,4.037-9,9s4.037,9,9,9s9-4.037,9-9S31.963,18,27,18z M27,34c-3.859,0-7-3.141-7-7s3.141-7,7-7
+						s7,3.141,7,7S30.859,34,27,34z"/>
+				</g>
+			</svg>
+			</div>
+	</div>
+	<div id="settingsOverlay">
+		<div id="settingsContent">
+			<h2>Settings</h2>
+			<div class="theme-switch-wrapper">
+				<label class="theme-switch">
+					<input type="checkbox" id="themeToggle">
+					<span class="slider"></span>
+				</label>
+			</div>
+			<a href="https://github.com/aryansrao" target="_blank">aryansrao</a>
+			<div id="closeSettings" class="closeBtn"></div>
+		</div>
+	</div>
+	<div id="response"></div>
+	<div id="inputArea">
+		<button id="askBtn">Send</button>
+		<textarea id="prompt" rows="1" placeholder="Type your message..."></textarea>
+	</div>
+	<script>
+		const vscode = acquireVsCodeApi();
+		const responseDiv = document.getElementById('response');
+		const promptInput = document.getElementById('prompt');
+		const themeToggle = document.getElementById('themeToggle');
+		const settingsBtn = document.getElementById('settingsBtn');
+		const settingsOverlay = document.getElementById('settingsOverlay');
+		const closeSettings = document.getElementById('closeSettings');
+		let isDarkTheme = true;
+
+		document.getElementById('askBtn').addEventListener('click', sendMessage);
+		promptInput.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter' && !event.shiftKey) {
+				event.preventDefault();
+				sendMessage();
+			}
+		});
+
+		themeToggle.addEventListener('change', () => {
+			const isDarkTheme = !themeToggle.checked;
+			document.body.classList.toggle('light-theme', !isDarkTheme);
+		});
+
+		settingsBtn.addEventListener('click', () => {
+			settingsOverlay.classList.add('visible');
+		});
+
+		closeSettings.addEventListener('click', () => {
+			settingsOverlay.classList.remove('visible');
+			});
+
+		function sendMessage() {
+			const text = promptInput.value;
+			if (text.trim()) {
+				vscode.postMessage({ command: 'chat', text });
+				appendMessage('You', text, 'user');
+				promptInput.value = '';
+				appendLoadingMessage();
+			}
+		}
+
+		function appendMessage(sender, text, type) {
+			const messageElement = document.createElement('div');
+			messageElement.className = 'message ' + type;
+			messageElement.setAttribute('data-aos', 'fade-up');
+			const senderLabel = document.createElement('div');
+			senderLabel.className = 'sender-label';
+			senderLabel.textContent = type === 'user' ? 'You:' : 'DeepSeek:';
+			messageElement.appendChild(senderLabel);
+			const contentElement = document.createElement('div');
+			contentElement.className = 'content';
+			contentElement.textContent = text;
+			messageElement.appendChild(contentElement);
+			if (type === 'bot') {
+				const copyBtn = document.createElement('button');
+				copyBtn.className = 'copyBtn';
+				copyBtn.textContent = 'Copy';
+				copyBtn.addEventListener('click', () => {
+					navigator.clipboard.writeText(text).then(() => {
+						copyBtn.textContent = 'Copied';
+						setTimeout(() => {
+							copyBtn.textContent = 'Copy';
+						}, 2000);
+					});
+				});
+				messageElement.appendChild(copyBtn);
+			}
+			responseDiv.appendChild(messageElement);
+			responseDiv.scrollTop = responseDiv.scrollHeight;
+		}
+
+		function appendLoadingMessage() {
+			const messageElement = document.createElement('div');
+			messageElement.className = 'message bot loading';
+			const contentElement = document.createElement('div');
+			contentElement.className = 'content';
+			messageElement.appendChild(contentElement);
+			responseDiv.appendChild(messageElement);
+			responseDiv.scrollTop = responseDiv.scrollHeight;
+		}
+
+		window.addEventListener('message', event => {
+			const { command, text } = event.data;
+			if (command === 'chatResponse') {
+				const loadingMessage = document.querySelector('.message.loading');
+				if (loadingMessage) {
+					loadingMessage.classList.remove('loading');
+					loadingMessage.classList.add('loaded');
+					loadingMessage.querySelector('.content').textContent = text;
+					const copyBtn = document.createElement('button');
+					copyBtn.className = 'copyBtn';
+					copyBtn.textContent = 'Copy';
+					copyBtn.addEventListener('click', () => {
+						navigator.clipboard.writeText(text).then(() => {
+							copyBtn.textContent = 'Copied';
+							setTimeout(() => {
+								copyBtn.textContent = 'Copy';
+							}, 2000);
+						});
+					});
+					loadingMessage.appendChild(copyBtn);
+				}
+			}
+		});
+
+		AOS.init();
+
+		gsap.from(".navbar", { duration: 1, y: -50, opacity: 0, ease: "power2.inOut" });
+		gsap.from("#response", { duration: 1, x: -100, opacity: 0, ease: "power2.inOut" });
+		gsap.from("#inputArea", { duration: 1, y: 100, opacity: 0, ease: "power2.inOut" });
+	</script>
+</body>
+</html>
