@@ -11,7 +11,10 @@
   
 
 ## Screenshots
-
+<div align="center">
+    <img src="media/demo.gif" alt="DeepSeek Chat Interface - Full" width="75%" />
+    <p><em>DeepSeek Chat Interface - Full</em></p>
+</div>
   
 
 <div  align="center">
@@ -19,6 +22,8 @@
 <table>
 
 <tr>
+
+
 
 <td  width="50%">
 
