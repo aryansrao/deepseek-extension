@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- Responsive viewport settings with no-zoom for better mobile experience -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DeepSeek Extension</title>
+  <!-- Google Fonts - Poppins with all weights and styles -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="./style.css">
+  <link favicon href="assets/favicon.png" />
+</head>
+
+<body>
+  <!-- Loading overlay - shown while the page loads -->
+  <div class="loading-overlay">
+    <div class="loading-text">DEEPSEEK - Extension</div>
+  </div>
+
+  <!-- ============= HOME SECTION ============= -->
+  <div class="c-header" id="home">
+    <!-- Logo container -->
+    <div class="logo-container">
+      <svg fill="currentColor" fill-rule="evenodd" height="80px" style="flex:none;line-height:1" viewBox="0 0 131 24"
+        xmlns="http://www.w3.org/2000/svg" class="deepseek-logo">
+        <title>DeepSeek</title>
+        <path
+          d="M117.986 0h-3.21v19.404h3.21V0zM8.7 5.215h1.83v2.838H8.7c-1.135 0-2.28.282-3.019 1.068-.738.785-1.016 1.99-1.016 3.194s.267 2.408 1.016 3.193c.75.786 1.884 1.068 3.018 1.068 1.135 0 2.28-.282 3.018-1.068.739-.785 1.017-1.99 1.017-3.193V.649h3.21v18.755h-3.21V18.21h-.589a3.498 3.498 0 01-.192.199c-.803.733-2.034.995-3.243.995-1.894 0-3.788-.472-5.03-1.78C2.44 16.314 2 14.303 2 12.303c0-2 .45-4 1.68-5.32 1.242-1.308 3.136-1.77 5.02-1.77zM57.564 18.9h-1.83v-2.837h1.83c1.134 0 2.28-.283 3.017-1.068.739-.785 1.017-1.99 1.017-3.194s-.267-2.408-1.017-3.194c-.749-.785-1.883-1.068-3.017-1.068s-2.28.283-3.018 1.068c-.738.786-1.017 1.99-1.017 3.194v11.655h-3.21V4.712h3.21v1.194h.59a3.42 3.42 0 01.186-.194l.005-.005c.803-.733 2.034-.995 3.243-.995 1.895 0 3.788.471 5.03 1.78 1.241 1.31 1.68 3.32 1.68 5.32 0 2-.45 4-1.68 5.319-1.23 1.32-3.135 1.77-5.019 1.77zM32.05 13.204v-1.14c0-2.064-.46-4.137-1.754-5.498-1.285-1.362-3.264-1.843-5.223-1.843-1.958 0-3.928.492-5.222 1.843-1.295 1.35-1.755 3.434-1.755 5.497 0 2.063.47 4.136 1.755 5.498 1.284 1.36 3.264 1.843 5.222 1.843 1.959 0 3.938-.493 5.223-1.843.663-.692 1.102-1.582 1.38-2.566h-3.168a5.026 5.026 0 01-.3.367c-.77.816-1.958 1.11-3.135 1.11-1.177 0-2.365-.304-3.136-1.11-.77-.807-1.048-2.063-1.048-3.299 0-1.236.278-2.482 1.049-3.298.77-.817 1.958-1.11 3.135-1.11 1.177 0 2.365.293 3.136 1.11.535.565.834 1.34.963 2.167H23.5v2.272h8.55zM48.168 12.063v1.141h-8.55v-2.272h5.671c-.129-.827-.428-1.602-.963-2.167-.77-.817-1.959-1.11-3.136-1.11s-2.365.293-3.136 1.11c-.77.816-1.048 2.063-1.048 3.298 0 1.236.278 2.492 1.049 3.299.77.806 1.958 1.11 3.135 1.11 1.177 0 2.365-.294 3.136-1.11.107-.116.203-.241.299-.367h3.168c-.278.985-.717 1.874-1.38 2.566-1.285 1.35-3.264 1.843-5.223 1.843s-3.938-.482-5.222-1.843c-1.285-1.362-1.756-3.435-1.756-5.498s.46-4.147 1.755-5.497c1.296-1.351 3.264-1.843 5.223-1.843s3.938.481 5.222 1.843c1.296 1.36 1.756 3.434 1.756 5.497zM78.635 18.315c-1.284.806-3.263 1.089-5.222 1.089-1.958 0-3.917-.294-5.212-1.09-1.295-.795-1.755-2.03-1.755-3.246h3.767c0 .472.225.953.824 1.257.6.304 1.54.419 2.462.419.92 0 1.851-.115 2.46-.42.611-.303.825-.784.825-1.256 0-.47-.214-.952-.824-1.256-.61-.304-1.627-.419-2.547-.419-1.777 0-3.563-.293-4.73-1.09-1.167-.795-1.584-2.03-1.584-3.245 0-1.215.417-2.44 1.584-3.246 1.167-.807 2.953-1.09 4.73-1.09 1.776 0 3.564.294 4.73 1.09 1.167.795 1.584 2.031 1.584 3.246h-3.264c0-.471-.203-.942-.749-1.257-.546-.303-1.391-.419-2.226-.419s-1.68.105-2.226.42c-.556.303-.75.785-.75 1.256 0 .47.204.942.75 1.256.545.304 1.316.42 2.151.42 1.959 0 3.938.292 5.222 1.088 1.295.796 1.756 2.032 1.756 3.246 0 1.215-.471 2.44-1.756 3.247zM96.507 12.063v1.141h-8.55v-2.272h5.672c-.129-.827-.429-1.602-.963-2.167-.771-.817-1.959-1.11-3.136-1.11s-2.366.293-3.136 1.11c-.77.816-1.048 2.063-1.048 3.298 0 1.236.278 2.492 1.048 3.299.77.806 1.959 1.11 3.135 1.11 1.178 0 2.366-.294 3.137-1.11.106-.116.203-.241.3-.367h3.167c-.279.985-.717 1.874-1.38 2.566-1.284 1.35-3.265 1.843-5.224 1.843-1.957 0-3.938-.482-5.222-1.843-1.284-1.362-1.754-3.435-1.754-5.498s.46-4.147 1.754-5.497c1.296-1.351 3.265-1.843 5.222-1.843 1.96 0 3.94.481 5.224 1.843 1.294 1.36 1.754 3.434 1.754 5.497zM112.624 13.204v-1.14c0-2.064-.46-4.137-1.754-5.498-1.285-1.362-3.265-1.843-5.223-1.843-1.959 0-3.928.492-5.222 1.843-1.296 1.35-1.756 3.434-1.756 5.497 0 2.063.471 4.136 1.756 5.498 1.284 1.36 3.263 1.843 5.222 1.843 1.958 0 3.938-.493 5.223-1.843.663-.692 1.102-1.582 1.38-2.566h-3.168l-.012.016c-.093.12-.185.24-.288.35-.77.817-1.957 1.11-3.135 1.11-1.177 0-2.365-.303-3.136-1.11-.77-.806-1.049-2.062-1.049-3.298 0-1.236.279-2.482 1.049-3.298.771-.817 1.959-1.11 3.136-1.11 1.178 0 2.365.293 3.135 1.11.536.565.836 1.34.964 2.167h-5.672v2.272h8.55zM128.73 19.404l-5.264-7.78 5.264-6.252h-3.97l-5.265 6.251 5.265 7.78h3.97z">
+        </path>
+      </svg>
+    </div>
+    <!-- Main headline and description -->
+    <p>Get deepseek now on your Visual Studio Code</p>
+  </div>
+
+  <!-- ============= FEATURES GRID ============= -->
+  <div id="cards" role="grid">
+    <!-- Feature 1: AI-Powered -->
+    <div class="card">
+      <div class="card-border"></div>
+      <div class="card-content">
+        <div class="card-info-wrapper">
+          <div class="card-info">
+            <i class="fa-solid fa-robot"></i>
+            <div class="card-info-title">
+              <h3>DeepSeek powered</h3>
+              <h4>Intelligent code assistance using DeepSeek</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 2: Open source -->
+    <div class="card">
+      <div class="card-border"></div>
+      <div class="card-content">
+        <div class="card-info-wrapper">
+          <div class="card-info">
+            <i class="fa-solid fa-code"></i>
+            <div class="card-info-title">
+              <h3>Open source</h3>
+              <h4>This project is publically available for modifications and customisations</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 3: Natural Interaction -->
+    <div class="card">
+      <div class="card-border"></div>
+      <div class="card-content">
+        <div class="card-info-wrapper">
+          <div class="card-info">
+            <i class="fa-solid fa-comments"></i>
+            <div class="card-info-title">
+              <h3>Natural Interaction</h3>
+              <h4>Chat with AI about your code</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 4: Local models -->
+    <div class="card">
+      <div class="card-border"></div>
+      <div class="card-content">
+        <div class="card-info-wrapper">
+          <div class="card-info">
+            <i class="fa-solid fa-bolt"></i>
+            <div class="card-info-title">
+              <h3>Local models</h3>
+              <h4>Uses LLMs to provide better responses</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 5: Easy Setup -->
+    <div class="card">
+      <div class="card-border"></div>
+      <div class="card-content">
+        <div class="card-info-wrapper">
+          <div class="card-info">
+            <i class="fa-solid fa-gear"></i>
+            <div class="card-info-title">
+              <h3>Easy Setup</h3>
+              <h4>Simple installation and configuration</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 6: Secure -->
+    <div class="card">
+      <div class="card-border"></div>
+      <div class="card-content">
+        <div class="card-info-wrapper">
+          <div class="card-info">
+            <i class="fa-solid fa-shield"></i>
+            <div class="card-info-title">
+              <h3>Secure</h3>
+              <h4>Privacy-focused implementation uses LLMs for better security</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ============= SETUP SECTION ============= -->
+  <!-- Setup instructions header -->
+  <div class="c-header" id="setup">
+    <h1>Setup Guide</h1>
+    <p>Follow these simple steps to get DeepSeek running in your Visual Studio Code</p>
+  </div>
+
+  <!-- Step-by-step setup instructions -->
+  <section class="setup-section">
+    <div class="setup-container">
+      <div class="setup-steps">
+        <!-- Step 1: Install Ollama -->
+        <div class="setup-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Install Ollama</h3>
+            <p>Download and install Ollama from <a href="https://ollama.com/download" target="_blank"
+                class="setup-link">ollama.com/download</a>.</p>
+          </div>
+        </div>
+
+        <!-- Step 2: Install DeepSeek Model -->
+        <div class="setup-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Install DeepSeek R1 Model</h3>
+            <p>Open your terminal and run the command to install the DeepSeek R1 model:</p>
+            <div class="code-block">
+              <code>ollama run deepseek-r1</code>
+            </div>
+            <p>Alternatively, you can visit <a href="https://ollama.com/library/deepseek-r1" target="_blank"
+                class="setup-link">ollama.com/library/deepseek-r1</a> for more information.</p>
+          </div>
+        </div>
+
+        <!-- Step 3: Ensure Ollama is running -->
+        <div class="setup-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Ensure Ollama is Running</h3>
+            <p>Make sure the Ollama application is running in the background before using the DeepSeek extension.</p>
+          </div>
+        </div>
+
+        <!-- Step 4: Start the extension -->
+        <div class="setup-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Start DeepSeek in VS Code</h3>
+            <p>To start the DeepSeek extension:</p>
+            <ol class="inner-list">
+              <li>Open the Command Palette in VS Code (<kbd>Ctrl+Shift+P</kbd> or <kbd>Cmd+Shift+P</kbd> on Mac)</li>
+              <li>Type <code>start</code></li>
+              <li>Select "DeepSeek: Start Extension" from the dropdown</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============= DEMO SECTION ============= -->
+  <!-- Demo section header -->
+  <div class="c-header" id="demo">
+    <h1>Demo</h1>
+    <p>See DeepSeek in action and discover how it enhances your coding workflow</p>
+  </div>
+
+  <!-- Video demonstration section -->
+  <section class="demo-section">
+    <div class="container">
+      <div class="demo-video-container">
+        <!-- Video with poster image for better loading experience -->
+        <video controls poster="assets/thumbnail.jpeg" class="main-demo-video">
+          <source src="assets/demo.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screenshots grid - 2-column layout with theme variants -->
+  <div id="screenshot-grid">
+    <!-- Dark theme screenshot -->
+    <div class="screenshot-card">
+      <div class="screenshot-content">
+        <div class="screenshot-image">
+          <img src="assets/screenshot1.png" alt="DeepSeek in dark mode">
+        </div>
+        <div class="screenshot-info">
+          <h3>Dark Theme</h3>
+          <p>DeepSeek looks great in dark mode with a sleek and modern design.</p>
+        </div>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="screenshot-content">
+        <div class="screenshot-image">
+          <img src="assets/screenshot2.png" alt="DeepSeek in light mode">
+        </div>
+        <div class="screenshot-info">
+          <h3>Light Theme</h3>
+          <p>DeepSeek looks great in light mode with a sleek and modern design.</p>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  </div>
+
+  
+
+  <!-- ============= NAVIGATION BAR ============= -->
+  <!-- Fixed bottom navigation with section links -->
+  <div class="extension-links" data-scroll-control="true">
+    <!-- Internal page links -->
+    <a href="#home" class="extension-link">
+      <i class="fa-solid fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="#setup" class="extension-link">
+      <i class="fa-solid fa-wrench"></i>
+      <span>Setup</span>
+    </a>
+    <a href="#demo" class="extension-link">
+      <i class="fa-solid fa-play"></i>
+      <span>Demo</span>
+    </a>
+
+    <!-- External links -->
+    <a href="https://github.com/aryansrao/deepseek-extension" target="_blank" class="extension-link">
+      <i class="fab fa-github"></i>
+      <span>GitHub</span>
+    </a>
+    <a href="https://marketplace.visualstudio.com/items?itemName=aryansrao.deekseek-extension" target="_blank"
+      class="extension-link">
+      <i class="fa-solid fa-store"></i>
+      <span>Get</span>
+    </a>
+  </div>
+
+  <!-- ============= SCRIPTS ============= -->
+
+  <!-- Main JavaScript file -->
+  <script src="./main.js"></script>
+</body>
+
+</html>
