@@ -5,11 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Deep Seek Chat</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 	<style>
 		body {
-			font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+			font-family: 'Poppins', sans-serif;
 			margin: 0;
 			padding: 0;
 			background-color: var(--background-color, #000);
@@ -35,6 +36,8 @@
 			--overlay-background: rgba(0, 0, 0, 0.453);
 			--settings-background: #000000;
 			--settings-border-color: #333;
+			--accent-color: #43007d;
+			--accent-color-light: #6e00c1;
 		}
 		.light-theme {
 			--background-color: #ffffff;
@@ -70,7 +73,6 @@
 			align-items: center;
 			border-bottom: 1px solid var(--border-color);
 			transition: background-color 0.5s, border-color 0.5s;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 		}
 		.navbar img {
 			height: 40px;
@@ -136,10 +138,11 @@
 			margin-left: 0.5rem;
 			transition: background-color 0.5s, color 0.5s, box-shadow 0.3s;
 			font-size: 0.875rem;
+			font-family: 'Poppins', sans-serif;
 		}
 		#prompt:focus {
 			outline: none;
-			box-shadow: 0 0 10px rgba(0, 122, 204, 0.5);
+			box-shadow: 0 0 10px var(--accent-color-light);
 		}
 		#askBtn {
 			padding: 0.75rem 1.5rem;
@@ -148,14 +151,9 @@
 			background-color: var(--button-background);
 			color: var(--text-color);
 			cursor: pointer;
-			transition: background-color 0.3s, transform 0.3s, color 0.5s, box-shadow 0.3s;
 			font-size: 0.875rem;
 		}
-		#askBtn:hover {
-			background-color: var(--button-hover-background);
-			transform: scale(1.05);
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-		}
+
 		.message {
 			display: flex;
 			align-items: flex-start;
@@ -181,10 +179,6 @@
 		}
 		.message.loaded .content {
 			animation: fadeInText 1s forwards;
-		}
-		.message:hover {
-			transform: scale(1.02);
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 		}
 		.message.user {
 			background-color: transparent;
@@ -226,7 +220,7 @@
 			transition: transform 0.3s, filter 0.3s;
 		}
 		.navbar svg:hover {
-			filter: drop-shadow(0 0 10px var(--link-color));
+			filter: drop-shadow(0 0 10px var(--accent-color-light));
 		}
 		#settingsOverlay {
 			position: fixed;
