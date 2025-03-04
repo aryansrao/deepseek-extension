@@ -172,7 +172,7 @@ DeepSeek brings powerful AI assistance directly into VS Code, running completely
 
   
 
-- [Ollama Docs](https://ollama.com/docs)
+- [Website](https://deepseek-extension.vercel.app)
 
   
 
