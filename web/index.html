@@ -1,286 +1,827 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <!-- Responsive viewport settings with no-zoom for better mobile experience -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>DeepSeek Extension</title>
-  <!-- Google Fonts - Poppins with all weights and styles -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet">
-  <!-- Main stylesheet -->
-  <link rel="stylesheet" href="./style.css">
-  <link favicon href="assets/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>DeepSeek Extension - Local AI Programming Assistant for VS Code | Ollama Powered</title>
+    <meta name="title" content="DeepSeek Extension - Local AI Programming Assistant for VS Code | Ollama Powered">
+    <meta name="description" content="Revolutionary VS Code extension for AI-powered code assistance. Run DeepSeek R1 locally with Ollama. 12,680+ installs. Free, open-source, privacy-focused. The future of coding is here.">
+    <meta name="keywords" content="DeepSeek, VS Code extension, AI code assistant, Ollama, local AI, code generation, programming assistant, DeepSeek R1, AI coding, developer tools, VS Code AI, local LLM">
+    <meta name="author" content="Aryan Rao">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://deepseek-extension.vercel.app/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://deepseek-extension.vercel.app/">
+    <meta property="og:title" content="DeepSeek Extension - The Future of AI-Powered Coding">
+    <meta property="og:description" content="Revolutionary VS Code extension. Run powerful AI locally. 12,680+ developers. Zero compromise on privacy.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://deepseek-extension.vercel.app/">
+    <meta property="twitter:title" content="DeepSeek Extension - Local AI Programming">
+    <meta property="twitter:description" content="The future of coding. AI-powered, privacy-first, lightning-fast.">
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DeepSeek Extension",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "VS Code 1.96+",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5",
+            "ratingCount": "2"
+        }
+    }
+    </script>
+    
+    <!-- Geist Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --black: #000000;
+            --dark-purple: #0a0014;
+            --purple: #6b00ff;
+            --purple-glow: #8b5cf6;
+            --white: #ffffff;
+            --gray: rgba(255, 255, 255, 0.5);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+        
+        body {
+            font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Grid Background */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(107, 0, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(107, 0, 255, 0.03) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Animated Gradient Background */
+        .gradient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(180px);
+            opacity: 0.15;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .orb-1 {
+            width: 800px;
+            height: 800px;
+            background: var(--purple);
+            top: -400px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: var(--purple-glow);
+            bottom: -300px;
+            left: -200px;
+            animation-delay: 7s;
+        }
+        
+        .orb-3 {
+            width: 500px;
+            height: 500px;
+            background: var(--purple);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 14s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(100px, -100px) scale(1.1); }
+            66% { transform: translate(-100px, 100px) scale(0.9); }
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 2rem 4rem;
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        nav {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            letter-spacing: -0.01em;
+        }
+        
+        .nav-links a:hover {
+            color: var(--white);
+        }
+        
+        .install-btn {
+            background: var(--white);
+            color: var(--black);
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            letter-spacing: -0.01em;
+        }
+        
+        .install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 60px rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Hero */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            font-weight: 900;
+            margin-bottom: 2rem;
+            line-height: 0.95;
+            letter-spacing: -0.04em;
+            background: linear-gradient(180deg, var(--white) 0%, rgba(255, 255, 255, 0.4) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: var(--gray);
+            margin-bottom: 4rem;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .primary-btn {
+            background: var(--white);
+            color: var(--black);
+            padding: 1.25rem 3rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            letter-spacing: -0.01em;
+        }
+        
+        .primary-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 30px 80px rgba(255, 255, 255, 0.25);
+        }
+        
+        .secondary-btn {
+            background: transparent;
+            color: var(--white);
+            padding: 1.25rem 3rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-decoration: none;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            letter-spacing: -0.01em;
+        }
+        
+        .secondary-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--white);
+            transform: translateY(-4px);
+        }
+        
+        /* Stats Bar */
+        .stats-bar {
+            position: relative;
+            padding: 4rem 2rem;
+            z-index: 1;
+        }
+        
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 3rem;
+            background: rgba(10, 0, 20, 0.4);
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, var(--white), var(--purple-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+        
+        /* Features Grid */
+        .features {
+            position: relative;
+            padding: 8rem 2rem;
+            z-index: 1;
+        }
+        
+        .features-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 6rem;
+            letter-spacing: -0.03em;
+            background: linear-gradient(180deg, var(--white) 0%, rgba(255, 255, 255, 0.5) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            padding: 3rem;
+            background: rgba(10, 0, 20, 0.3);
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--purple), transparent);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(107, 0, 255, 0.5);
+            box-shadow: 0 40px 100px rgba(107, 0, 255, 0.2);
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            margin-bottom: 2rem;
+            background: rgba(107, 0, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(107, 0, 255, 0.3);
+        }
+        
+        .feature-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--purple-glow);
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .feature-description {
+            color: var(--gray);
+            line-height: 1.8;
+            font-size: 0.95rem;
+            letter-spacing: -0.01em;
+        }
+        
+        /* Setup Section */
+        .setup {
+            position: relative;
+            padding: 8rem 2rem;
+            z-index: 1;
+        }
+        
+        .setup-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .setup-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            margin-top: 4rem;
+            background: var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        
+        .step {
+            padding: 3rem;
+            background: rgba(10, 0, 20, 0.4);
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
+            text-align: left;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+        
+        .step:hover {
+            background: rgba(10, 0, 20, 0.6);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: var(--purple);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        
+        .step-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .step-description {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            letter-spacing: -0.01em;
+        }
+        
+        .code-block {
+            background: var(--black);
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: var(--purple-glow);
+            border: 1px solid var(--border);
+            letter-spacing: -0.01em;
+        }
+        
+        /* CTA Section */
+        .cta {
+            position: relative;
+            padding: 12rem 2rem;
+            z-index: 1;
+            text-align: center;
+        }
+        
+        .cta-card {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 6rem 4rem;
+            background: rgba(10, 0, 20, 0.4);
+            backdrop-filter: blur(80px);
+            -webkit-backdrop-filter: blur(80px);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(107, 0, 255, 0.1), transparent 70%);
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+        
+        .cta-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+            letter-spacing: -0.01em;
+        }
+        
+        /* Footer */
+        footer {
+            position: relative;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--border);
+            z-index: 1;
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+        }
+        
+        .copyright {
+            color: var(--gray);
+            font-size: 0.9rem;
+            letter-spacing: -0.01em;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 3rem;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .step-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .cta-card {
+                padding: 4rem 2rem;
+            }
+            
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-links {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <!-- Loading overlay - shown while the page loads -->
-  <div class="loading-overlay">
-    <div class="loading-text">DEEPSEEK - Extension</div>
-  </div>
-
-  <!-- ============= HOME SECTION ============= -->
-  <div class="c-header" id="home">
-    <!-- Logo container -->
-    <div class="logo-container">
-      <svg fill="currentColor" fill-rule="evenodd" height="80px" style="flex:none;line-height:1" viewBox="0 0 131 24"
-        xmlns="http://www.w3.org/2000/svg" class="deepseek-logo">
-        <title>DeepSeek</title>
-        <path
-          d="M117.986 0h-3.21v19.404h3.21V0zM8.7 5.215h1.83v2.838H8.7c-1.135 0-2.28.282-3.019 1.068-.738.785-1.016 1.99-1.016 3.194s.267 2.408 1.016 3.193c.75.786 1.884 1.068 3.018 1.068 1.135 0 2.28-.282 3.018-1.068.739-.785 1.017-1.99 1.017-3.193V.649h3.21v18.755h-3.21V18.21h-.589a3.498 3.498 0 01-.192.199c-.803.733-2.034.995-3.243.995-1.894 0-3.788-.472-5.03-1.78C2.44 16.314 2 14.303 2 12.303c0-2 .45-4 1.68-5.32 1.242-1.308 3.136-1.77 5.02-1.77zM57.564 18.9h-1.83v-2.837h1.83c1.134 0 2.28-.283 3.017-1.068.739-.785 1.017-1.99 1.017-3.194s-.267-2.408-1.017-3.194c-.749-.785-1.883-1.068-3.017-1.068s-2.28.283-3.018 1.068c-.738.786-1.017 1.99-1.017 3.194v11.655h-3.21V4.712h3.21v1.194h.59a3.42 3.42 0 01.186-.194l.005-.005c.803-.733 2.034-.995 3.243-.995 1.895 0 3.788.471 5.03 1.78 1.241 1.31 1.68 3.32 1.68 5.32 0 2-.45 4-1.68 5.319-1.23 1.32-3.135 1.77-5.019 1.77zM32.05 13.204v-1.14c0-2.064-.46-4.137-1.754-5.498-1.285-1.362-3.264-1.843-5.223-1.843-1.958 0-3.928.492-5.222 1.843-1.295 1.35-1.755 3.434-1.755 5.497 0 2.063.47 4.136 1.755 5.498 1.284 1.36 3.264 1.843 5.222 1.843 1.959 0 3.938-.493 5.223-1.843.663-.692 1.102-1.582 1.38-2.566h-3.168a5.026 5.026 0 01-.3.367c-.77.816-1.958 1.11-3.135 1.11-1.177 0-2.365-.304-3.136-1.11-.77-.807-1.048-2.063-1.048-3.299 0-1.236.278-2.482 1.049-3.298.77-.817 1.958-1.11 3.135-1.11 1.177 0 2.365.293 3.136 1.11.535.565.834 1.34.963 2.167H23.5v2.272h8.55zM48.168 12.063v1.141h-8.55v-2.272h5.671c-.129-.827-.428-1.602-.963-2.167-.77-.817-1.959-1.11-3.136-1.11s-2.365.293-3.136 1.11c-.77.816-1.048 2.063-1.048 3.298 0 1.236.278 2.492 1.049 3.299.77.806 1.958 1.11 3.135 1.11 1.177 0 2.365-.294 3.136-1.11.107-.116.203-.241.299-.367h3.168c-.278.985-.717 1.874-1.38 2.566-1.285 1.35-3.264 1.843-5.223 1.843s-3.938-.482-5.222-1.843c-1.285-1.362-1.756-3.435-1.756-5.498s.46-4.147 1.755-5.497c1.296-1.351 3.264-1.843 5.223-1.843s3.938.481 5.222 1.843c1.296 1.36 1.756 3.434 1.756 5.497zM78.635 18.315c-1.284.806-3.263 1.089-5.222 1.089-1.958 0-3.917-.294-5.212-1.09-1.295-.795-1.755-2.03-1.755-3.246h3.767c0 .472.225.953.824 1.257.6.304 1.54.419 2.462.419.92 0 1.851-.115 2.46-.42.611-.303.825-.784.825-1.256 0-.47-.214-.952-.824-1.256-.61-.304-1.627-.419-2.547-.419-1.777 0-3.563-.293-4.73-1.09-1.167-.795-1.584-2.03-1.584-3.245 0-1.215.417-2.44 1.584-3.246 1.167-.807 2.953-1.09 4.73-1.09 1.776 0 3.564.294 4.73 1.09 1.167.795 1.584 2.031 1.584 3.246h-3.264c0-.471-.203-.942-.749-1.257-.546-.303-1.391-.419-2.226-.419s-1.68.105-2.226.42c-.556.303-.75.785-.75 1.256 0 .47.204.942.75 1.256.545.304 1.316.42 2.151.42 1.959 0 3.938.292 5.222 1.088 1.295.796 1.756 2.032 1.756 3.246 0 1.215-.471 2.44-1.756 3.247zM96.507 12.063v1.141h-8.55v-2.272h5.672c-.129-.827-.429-1.602-.963-2.167-.771-.817-1.959-1.11-3.136-1.11s-2.366.293-3.136 1.11c-.77.816-1.048 2.063-1.048 3.298 0 1.236.278 2.492 1.048 3.299.77.806 1.959 1.11 3.135 1.11 1.178 0 2.366-.294 3.137-1.11.106-.116.203-.241.3-.367h3.167c-.279.985-.717 1.874-1.38 2.566-1.284 1.35-3.265 1.843-5.224 1.843-1.957 0-3.938-.482-5.222-1.843-1.284-1.362-1.754-3.435-1.754-5.498s.46-4.147 1.754-5.497c1.296-1.351 3.265-1.843 5.222-1.843 1.96 0 3.94.481 5.224 1.843 1.294 1.36 1.754 3.434 1.754 5.497zM112.624 13.204v-1.14c0-2.064-.46-4.137-1.754-5.498-1.285-1.362-3.265-1.843-5.223-1.843-1.959 0-3.928.492-5.222 1.843-1.296 1.35-1.756 3.434-1.756 5.497 0 2.063.471 4.136 1.756 5.498 1.284 1.36 3.263 1.843 5.222 1.843 1.958 0 3.938-.493 5.223-1.843.663-.692 1.102-1.582 1.38-2.566h-3.168l-.012.016c-.093.12-.185.24-.288.35-.77.817-1.957 1.11-3.135 1.11-1.177 0-2.365-.303-3.136-1.11-.77-.806-1.049-2.062-1.049-3.298 0-1.236.279-2.482 1.049-3.298.771-.817 1.959-1.11 3.136-1.11 1.178 0 2.365.293 3.135 1.11.536.565.836 1.34.964 2.167h-5.672v2.272h8.55zM128.73 19.404l-5.264-7.78 5.264-6.252h-3.97l-5.265 6.251 5.265 7.78h3.97z">
-        </path>
-      </svg>
+    <div class="grid-bg"></div>
+    <div class="gradient-bg">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
     </div>
-    <!-- Main headline and description -->
-    <p>Get deepseek now on your Visual Studio Code</p>
-  </div>
 
-  <!-- ============= FEATURES GRID ============= -->
-  <div id="cards" role="grid">
-    <!-- Feature 1: AI-Powered -->
-    <div class="card">
-      <div class="card-border"></div>
-      <div class="card-content">
-        <div class="card-info-wrapper">
-          <div class="card-info">
-            <i class="fa-solid fa-robot"></i>
-            <div class="card-info-title">
-              <h3>DeepSeek powered</h3>
-              <h4>Intelligent code assistance using DeepSeek</h4>
+    <header>
+        <nav>
+            <div class="logo">DeepSeek</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#setup">Setup</a>
+                <a href="https://github.com/aryansrao/deepseek-extension" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://marketplace.visualstudio.com/items?itemName=aryansrao.deekseek-extension" class="install-btn" target="_blank" rel="noopener">Install</a>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+        </nav>
+    </header>
 
-    <!-- Feature 2: Open source -->
-    <div class="card">
-      <div class="card-border"></div>
-      <div class="card-content">
-        <div class="card-info-wrapper">
-          <div class="card-info">
-            <i class="fa-solid fa-code"></i>
-            <div class="card-info-title">
-              <h3>Open source</h3>
-              <h4>This project is publically available for modifications and customisations</h4>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>The Future of<br>Code Assistance</h1>
+            <p class="subtitle">Run DeepSeek R1 locally. Zero compromise on privacy. Lightning-fast AI-powered coding directly in VS Code through Ollama.</p>
+            <div class="hero-actions">
+                <a href="https://marketplace.visualstudio.com/items?itemName=aryansrao.deekseek-extension" class="primary-btn" target="_blank" rel="noopener">Install Extension</a>
+                <a href="https://github.com/aryansrao/deepseek-extension" class="secondary-btn" target="_blank" rel="noopener">View on GitHub</a>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
+    </section>
 
-    <!-- Feature 3: Natural Interaction -->
-    <div class="card">
-      <div class="card-border"></div>
-      <div class="card-content">
-        <div class="card-info-wrapper">
-          <div class="card-info">
-            <i class="fa-solid fa-comments"></i>
-            <div class="card-info-title">
-              <h3>Natural Interaction</h3>
-              <h4>Chat with AI about your code</h4>
+    <section class="stats-bar">
+        <div class="stats-container">
+            <div class="stat">
+                <div class="stat-number">12,680+</div>
+                <div class="stat-label">Active Installs</div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Feature 4: Local models -->
-    <div class="card">
-      <div class="card-border"></div>
-      <div class="card-content">
-        <div class="card-info-wrapper">
-          <div class="card-info">
-            <i class="fa-solid fa-bolt"></i>
-            <div class="card-info-title">
-              <h3>Local models</h3>
-              <h4>Uses LLMs to provide better responses</h4>
+            <div class="stat">
+                <div class="stat-number">5.0</div>
+                <div class="stat-label">Rating</div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Feature 5: Easy Setup -->
-    <div class="card">
-      <div class="card-border"></div>
-      <div class="card-content">
-        <div class="card-info-wrapper">
-          <div class="card-info">
-            <i class="fa-solid fa-gear"></i>
-            <div class="card-info-title">
-              <h3>Easy Setup</h3>
-              <h4>Simple installation and configuration</h4>
+            <div class="stat">
+                <div class="stat-number">4</div>
+                <div class="stat-label">GitHub Stars</div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Feature 6: Secure -->
-    <div class="card">
-      <div class="card-border"></div>
-      <div class="card-content">
-        <div class="card-info-wrapper">
-          <div class="card-info">
-            <i class="fa-solid fa-shield"></i>
-            <div class="card-info-title">
-              <h3>Secure</h3>
-              <h4>Privacy-focused implementation uses LLMs for better security</h4>
+            <div class="stat">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Local</div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <!-- ============= SETUP SECTION ============= -->
-  <!-- Setup instructions header -->
-  <div class="c-header" id="setup">
-    <h1>Setup Guide</h1>
-    <p>Follow these simple steps to get DeepSeek running in your Visual Studio Code</p>
-  </div>
+    </section>
 
-  <!-- Step-by-step setup instructions -->
-  <section class="setup-section">
-    <div class="setup-container">
-      <div class="setup-steps">
-        <!-- Step 1: Install Ollama -->
-        <div class="setup-step">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Install Ollama</h3>
-            <p>Download and install Ollama from <a href="https://ollama.com/download" target="_blank"
-                class="setup-link">ollama.com/download</a>.</p>
-          </div>
-        </div>
-
-        <!-- Step 2: Install DeepSeek Model -->
-        <div class="setup-step">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Install DeepSeek R1 Model</h3>
-            <p>Open your terminal and run the command to install the DeepSeek R1 model:</p>
-            <div class="code-block">
-              <code>ollama run deepseek-r1</code>
+    <section id="features" class="features">
+        <div class="features-container">
+            <h2 class="section-title">Built for developers<br>who demand excellence</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Instant Code Generation</h3>
+                    <p class="feature-description">Generate production-ready code with DeepSeek R1's advanced reasoning. From simple functions to complex architectures, get intelligent suggestions in milliseconds.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Privacy First</h3>
+                    <p class="feature-description">Your code never leaves your machine. All AI processing happens locally through Ollama. No cloud, no data collection, no compromises on security.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Real-Time Analysis</h3>
+                    <p class="feature-description">Understand complex codebases instantly. Ask questions, trace dependencies, and explore architecture with context-aware AI that knows your entire project.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Intelligent Debugging</h3>
+                    <p class="feature-description">Find and fix bugs faster. AI-powered error analysis provides actionable solutions, explains stack traces, and guides you to resolution.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Code Optimization</h3>
+                    <p class="feature-description">Improve performance and maintainability. Get smart refactoring suggestions, learn best practices, and master modern patterns for your stack.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Lightning Fast</h3>
+                    <p class="feature-description">Local processing means zero latency. Get instant responses regardless of internet speed. Works perfectly offline after initial setup.</p>
+                </div>
             </div>
-            <p>Alternatively, you can visit <a href="https://ollama.com/library/deepseek-r1" target="_blank"
-                class="setup-link">ollama.com/library/deepseek-r1</a> for more information.</p>
-          </div>
         </div>
+    </section>
 
-        <!-- Step 3: Ensure Ollama is running -->
-        <div class="setup-step">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>Ensure Ollama is Running</h3>
-            <p>Make sure the Ollama application is running in the background before using the DeepSeek extension.</p>
-          </div>
+    <section id="setup" class="setup">
+        <div class="setup-container">
+            <h2 class="section-title">Setup in minutes</h2>
+            <div class="setup-steps">
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Install Ollama</h3>
+                    </div>
+                    <p class="step-description">Download and install Ollama to provide the local AI runtime for DeepSeek Extension.</p>
+                    <div class="code-block">https://ollama.com</div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Pull DeepSeek R1</h3>
+                    </div>
+                    <p class="step-description">Run this command in your terminal to download the DeepSeek R1 model.</p>
+                    <div class="code-block">ollama run deepseek-r1</div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Install Extension</h3>
+                    </div>
+                    <p class="step-description">Install from VS Code Marketplace and start coding with AI assistance.</p>
+                    <div class="code-block">code --install-extension aryansrao.deekseek-extension</div>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <!-- Step 4: Start the extension -->
-        <div class="setup-step">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h3>Start DeepSeek in VS Code</h3>
-            <p>To start the DeepSeek extension:</p>
-            <ol class="inner-list">
-              <li>Open the Command Palette in VS Code (<kbd>Ctrl+Shift+P</kbd> or <kbd>Cmd+Shift+P</kbd> on Mac)</li>
-              <li>Type <code>start</code></li>
-              <li>Select "DeepSeek: Start Extension" from the dropdown</li>
-            </ol>
-          </div>
+    <section class="cta">
+        <div class="cta-card">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to transform<br>your development workflow?</h2>
+                <p class="cta-subtitle">Join 12,680+ developers building the future with AI-powered code assistance.</p>
+                <div class="hero-actions">
+                    <a href="https://marketplace.visualstudio.com/items?itemName=aryansrao.deekseek-extension" class="primary-btn" target="_blank" rel="noopener">Get Started</a>
+                    <a href="https://github.com/aryansrao/deepseek-extension" class="secondary-btn" target="_blank" rel="noopener">Star on GitHub</a>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ============= DEMO SECTION ============= -->
-  <!-- Demo section header -->
-  <div class="c-header" id="demo">
-    <h1>Demo</h1>
-    <p>See DeepSeek in action and discover how it enhances your coding workflow</p>
-  </div>
-
-  <!-- Video demonstration section -->
-  <section class="demo-section">
-    <div class="container">
-      <div class="demo-video-container">
-        <!-- Video with poster image for better loading experience -->
-        <video controls poster="assets/thumbnail.jpeg" class="main-demo-video">
-          <source src="assets/demo.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-    </div>
-  </section>
-
-  <!-- Screenshots grid - 2-column layout with theme variants -->
-  <div id="screenshot-grid">
-    <!-- Dark theme screenshot -->
-    <div class="screenshot-card">
-      <div class="screenshot-content">
-        <div class="screenshot-image">
-          <img src="assets/screenshot1.png" alt="DeepSeek in dark mode">
+    <footer>
+        <div class="footer-container">
+            <div class="copyright">© 2025 DeepSeek Extension · MIT License · Created by Aryan Rao</div>
+            <div class="footer-links">
+                <a href="https://marketplace.visualstudio.com/items?itemName=aryansrao.deekseek-extension" target="_blank" rel="noopener">Marketplace</a>
+                <a href="https://github.com/aryansrao/deepseek-extension" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://github.com/aryansrao/deepseek-extension/issues" target="_blank" rel="noopener">Issues</a>
+                <a href="https://ollama.com" target="_blank" rel="noopener">Ollama</a>
+            </div>
         </div>
-        <div class="screenshot-info">
-          <h3>Dark Theme</h3>
-          <p>DeepSeek looks great in dark mode with a sleek and modern design.</p>
-        </div>
-      </div>
-    </div>
-    <div class="screenshot-card">
-      <div class="screenshot-content">
-        <div class="screenshot-image">
-          <img src="assets/screenshot2.png" alt="DeepSeek in light mode">
-        </div>
-        <div class="screenshot-info">
-          <h3>Light Theme</h3>
-          <p>DeepSeek looks great in light mode with a sleek and modern design.</p>
-        </div>
-      </div>
-    </div>
-
-
-  </div>
-  </div>
-
-  
-
-  <!-- ============= NAVIGATION BAR ============= -->
-  <!-- Fixed bottom navigation with section links -->
-  <div class="extension-links" data-scroll-control="true">
-    <!-- Internal page links -->
-    <a href="#home" class="extension-link">
-      <i class="fa-solid fa-home"></i>
-      <span>Home</span>
-    </a>
-    <a href="#setup" class="extension-link">
-      <i class="fa-solid fa-wrench"></i>
-      <span>Setup</span>
-    </a>
-    <a href="#demo" class="extension-link">
-      <i class="fa-solid fa-play"></i>
-      <span>Demo</span>
-    </a>
-
-    <!-- External links -->
-    <a href="https://github.com/aryansrao/deepseek-extension" target="_blank" class="extension-link">
-      <i class="fab fa-github"></i>
-      <span>GitHub</span>
-    </a>
-    <a href="https://marketplace.visualstudio.com/items?itemName=aryansrao.deekseek-extension" target="_blank"
-      class="extension-link">
-      <i class="fa-solid fa-store"></i>
-      <span>Get</span>
-    </a>
-  </div>
-
-  <!-- ============= SCRIPTS ============= -->
-
-  <!-- Main JavaScript file -->
-  <script src="./main.js"></script>
+    </footer>
 </body>
-
 </html>
