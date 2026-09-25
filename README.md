@@ -26,7 +26,7 @@ The extension talks to Ollama's local API. Your prompts, your code and the model
    ```
 
 2. Install the extension from the VS Code Marketplace (search "DeepSeek").
-3. Open the DeepSeek panel and start asking.
+3. Open the VS Code Command Palette (`Ctrl+Shift+P` on Windows/Linux or `Cmd+Shift+P` on macOS), then run **Open DeepSeek Chat**. The chat panel opens beside the editor.
 
 ## Features
 

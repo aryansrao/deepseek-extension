@@ -42,7 +42,7 @@
     "commands": [
       {
         "command": "deep-seek.start",
-        "title": "start"
+        "title": "Open DeepSeek Chat"
       }
     ]
   },
